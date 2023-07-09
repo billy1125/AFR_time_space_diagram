@@ -1,1 +1,1 @@
-python C:\Python\TRA_time_space_diagram\batch.py C:\Python\TRA_time_space_diagram\JSON C:\xampp\htdocs\diagram ALL
+python C:\Python\AFR_time_space_diagram\batch.py C:\Python\AFR_time_space_diagram\JSON C:\xampp\htdocs\diagram ALL

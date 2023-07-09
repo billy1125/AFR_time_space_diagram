@@ -37,7 +37,7 @@ class Auth():
 
 def read():
     a = Auth(app_id, app_key)
-    response = request('get', 'https://ptx.transportdata.tw/MOTC/v3/Rail/TRA/TrainLiveBoard?$format=JSON', headers=a.get_auth_header())
+    response = request('get', 'https://ptx.transportdata.tw/MOTC/v3/Rail/AFR/GeneralTrainTimetable', headers=a.get_auth_header())
     data = json.loads(response.content.decode('utf-8'))
     return data
     # pprint(response.content)
