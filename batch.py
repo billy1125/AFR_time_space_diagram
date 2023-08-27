@@ -73,7 +73,7 @@ def main (argv_json_location, argv_website_svg_location, argv_select_trains, mov
                         shutil.move('JSON/' + file_name, 'JSON_BACKUP/' + file_name)
 
             except Exception as e:
-                print("\n發生了一個錯誤：在第 {0} 車次出問題，可能問題是 {1}".format(train['Train'], str(e)))
+                print("\n發生了一個錯誤：在第 {0} 車次出問題，可能問題是 {1}".format(train['TrainNo'], str(e)))
             finally:
                 end = time.time()
                 print("\n工作完成！轉換時間共 {0} 秒\n".format(str(round(end - start, 2))))

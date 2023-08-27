@@ -3,7 +3,8 @@
 # 再轉為車次會在各運行路線的時間與位置資料
 
 import pandas as pd  
-import numpy as np
+# import numpy as np
+import re
 
 # 自訂class與module
 import environment_variable as ev
@@ -43,17 +44,38 @@ class SpaceTime:
 
     # 查詢表定台鐵時刻表所有「停靠」車站，可查詢特定車次
     def _find_train_timetable(self, train_no):
-        timetable = {}
+        timetable = {}     
 
         for TimeInfos in train_no['StopTimes']:
-            timetable[TimeInfos['StationID']] = [ (TimeInfos['ArrivalTime'] if TimeInfos['ArrivalTime'] != '' else TimeInfos['DepartureTime'])  + ":00",
-                                                  (TimeInfos['DepartureTime'] if TimeInfos['DepartureTime'] != '' else TimeInfos['ArrivalTime'])  + ":00",
+            arrivalTime = TimeInfos.get('ArrivalTime')
+            departureTime = TimeInfos.get('DepartureTime')
+
+            if self._check_format(arrivalTime):
+                arrivalTime = arrivalTime
+            else:
+                arrivalTime = departureTime
+
+            if self._check_format(departureTime):
+                departureTime = departureTime
+            else:
+                departureTime = arrivalTime
+
+            timetable[TimeInfos['StationID']] = [ arrivalTime + ":00",
+                                                  departureTime + ":00",
                                                 #   TimeInfos['DepartureTime'] + ":00", 
                                                   TimeInfos['StationID'],
                                                   TimeInfos['StopSequence'],
                                                   TimeInfos['StationName']['Zh_tw']]
 
-        return timetable  # 字典 車站ID: [到站時間, 離站時間, 車站ID, 順序]
+        return timetable  # 字典 車站ID: [到站時間, 離站時間, 車站ID, 順序, 名稱]
+
+    # 檢查到離站時間格式
+    def _check_format(self, input_string):
+        pattern = r'^\d{2}:\d{2}$'
+        if input_string is not None and re.match(pattern, input_string):
+            return True
+        else:
+            return False
 
     # 查詢車次會「停靠與通過」的所有車站
     def _find_passing_stations(self, timetable, line, line_dir):
